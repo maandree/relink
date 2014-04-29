@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 import os
 import sys
+import stat
+from subprocess import Popen
 
 from argparser import *
 
@@ -67,4 +69,54 @@ create_copy     = parser.opts['--duplicate']    is not None
 follow_links    = parser.opts['--follow-links'] is not None
 recursive       = parser.opts['--recursive']    is not None
 nul             = parser.opts['--nul']          is not None
+
+
+if use_relative and use_absolute:
+    sys.stderr.buffer.write(('%s: cannot mix %s with %s\n' % (sys.argv[0], '--relative', '--absolute')).encode('utf-8'))
+    sys.stderr.buffer.flush()
+    sys.exit(1)
+
+
+if sum([1 if b else 0 for b in (create_symlink, create_hardlink, create_copy)]) > 1:
+    sys.stderr.buffer.write(('%s: %s, %s and %s cannot be mixed with each other\n' % (sys.argv[0], '--symlink', '--hardlink', '--duplicate')).encode('utf-8'))
+    sys.stderr.buffer.flush()
+    sys.exit(1)
+
+
+use_relative = not use_absolute
+if not (create_symlink or create_hardlink or create_copy):
+    create_symlink = True
+
+
+if len(parser.files) == 0:
+    stdin = sys.stdin.buffer.read().decode('utf-8', 'error')
+    if nul:
+        stdin = stdin.replace('\n', '\0')
+    parser.files = [f for f in stdin.split('\0') if not f == '']
+
+
+def relink_files(files):
+    for file in files:
+        attr = os.stat(file, follow_symlinks = False)
+        if os.S_ISLNK(attr.st_mode):
+            target = (os.path.realpath if follow_links else readlink)(file)
+            os.unlink(file)
+            if create_symlink:
+                target = os.path.abspath(target)
+                if use_relative:
+                    dirname = os.path.dirname(os.path.abspath(file))
+                    dirname = os.path.abspath(dirname)
+                    target = os.path.relpath(target, dirname)
+                os.symlink(file, target)
+            elif create_hardlink:
+                os.link(file, target, follow_symlinks = False)
+            else:
+                Popen(['cp', '-a', '--', target, file]).wait()
+        elif recursive and os.S_ISDIR(attr.st_mode):
+            relink_files(os.listdir(file))
+        else:
+            sys.stderr.buffer.write(('%s: skipping %s\n' % (sys.argv[0], file)).encode('utf-8'))
+            sys.stderr.buffer.flush()
+
+relink_files(parser.files)
 
