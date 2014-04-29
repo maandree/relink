@@ -36,12 +36,12 @@ parser.add_argumentless(['--help'],         0, 'Display this message')
 parser.add_argumentless(['--copyright'],    0, 'Print copyright information')
 parser.add_argumentless(['--warranty'],     0, 'Print warranty disclaimer')
 parser.add_argumentless(['--version'],      0, 'Print program name and version')
-parser.add_argumentless(['--follow-links'], 0, 'Follow symlinks when resolving target')
 parser.add_argumentless(['--relative'],     0, 'Link to relative path (default)')
 parser.add_argumentless(['--absolute'],     0, 'Link to absolute path')
 parser.add_argumentless(['--symlink'],      0, 'Keep as symlink (default)')
 parser.add_argumentless(['--hardlink'],     0, 'Change into hardlink')
 parser.add_argumentless(['--duplicate'],    0, 'Duplicate target instead of linking')
+parser.add_argumentless(['--follow-links'], 0, 'Follow symlinks when resolving target')
 parser.add_argumentless(['--recursive'],    0, 'Change links that are inside directories')
 parser.add_argumentless(['--nul'],          0, 'Use NUL instead of LF as filename terminator')
 
@@ -57,13 +57,14 @@ else:  do_exit = False
 if do_exit:
     sys.exit(0)
 
-use_relative    = parser.opts['--relative']  is not None
-use_absolute    = parser.opts['--absolute']  is not None
+use_relative    = parser.opts['--relative']     is not None
+use_absolute    = parser.opts['--absolute']     is not None
 
-create_symlink  = parser.opts['--symlink']   is not None
-create_hardlink = parser.opts['--hardlink']  is not None
-create_copy     = parser.opts['--duplicate'] is not None
+create_symlink  = parser.opts['--symlink']      is not None
+create_hardlink = parser.opts['--hardlink']     is not None
+create_copy     = parser.opts['--duplicate']    is not None
 
-recursive       = parser.opts['--recursive'] is not None
-nul             = parser.opts['--nul']       is not None
+follow_links    = parser.opts['--follow-links'] is not None
+recursive       = parser.opts['--recursive']    is not None
+nul             = parser.opts['--nul']          is not None
 

@@ -1,0 +1,35 @@
+; relink — modify your symlinks
+; 
+; Copyright © 2014  Mattias Andrée (maandree@member.fsf.org)
+; 
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+; 
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+; 
+; You should have received a copy of the GNU General Public License
+; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+(relink
+  (multiple unargumented
+    ((options --help)         (complete --help)         (desc 'Display this message'))
+    ((options --copyright)    (complete --copyright)    (desc 'Print copyright information'))
+    ((options --warranty)     (complete --warranty)     (desc 'Print warranty disclaimer'))
+    ((options --version)      (complete --version)      (desc 'Print program name and version'))
+    ((options --relative)     (complete --relative)     (desc 'Link to relative path (default)'))
+    ((options --absolute)     (complete --absolute)     (desc 'Link to absolute path'))
+    ((options --symlink)      (complete --symlink)      (desc 'Keep as symlink (default)'))
+    ((options --hardlink)     (complete --hardlink)     (desc 'Change into hardlink'))
+    ((options --duplicate)    (complete --duplicate)    (desc 'Duplicate target instead of linking'))
+    ((options --follow-links) (complete --follow-links) (desc 'Follow symlinks when resolving target'))
+    ((options --recursive)    (complete --recursive)    (desc 'Change links that are inside directories'))
+    ((options --nul)          (complete --nul)          (desc 'Use NUL instead of LF as filename terminator'))
+  )
+)
+
