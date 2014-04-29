@@ -98,7 +98,7 @@ if len(parser.files) == 0:
 def relink_files(files):
     for file in files:
         attr = os.stat(file, follow_symlinks = False)
-        if os.S_ISLNK(attr.st_mode):
+        if stat.S_ISLNK(attr.st_mode):
             target = (os.path.realpath if follow_links else os.readlink)(file)
             os.unlink(file)
             if create_symlink:
@@ -112,7 +112,7 @@ def relink_files(files):
                 os.link(file, target, follow_symlinks = False)
             else:
                 Popen(['cp', '-a', '--', target, file]).wait()
-        elif recursive and os.S_ISDIR(attr.st_mode):
+        elif recursive and stat.S_ISDIR(attr.st_mode):
             relink_files(os.listdir(file))
         else:
             sys.stderr.buffer.write(('%s: skipping %s\n' % (sys.argv[0], file)).encode('utf-8'))
