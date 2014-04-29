@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# -*- python -*-
+copyright = '''
+relink — modify your symlinks
+
+Copyright © 2014  Mattias Andrée (maandree@member.fsf.org)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+import os
+import sys
+
+from argparser import *
+
+
+PROGRAM_NAME = 'relink'
+PROGRAM_VERSION = '1'
+
+
+parser = ArgParser('Modify your symlinks',
+                   sys.argv[0] + ' [options] [--] files...',
+                   None, None, True, ArgParser.standard_abbreviations())
+
+parser.add_argumentless(['--help'],         0, 'Display this message')
+parser.add_argumentless(['--copyright'],    0, 'Print copyright information')
+parser.add_argumentless(['--warranty'],     0, 'Print warranty disclaimer')
+parser.add_argumentless(['--version'],      0, 'Print program name and version')
+parser.add_argumentless(['--follow-links'], 0, 'Follow symlinks when resolving target')
+parser.add_argumentless(['--relative'],     0, 'Link to relative path (default)')
+parser.add_argumentless(['--absolute'],     0, 'Link to absolute path')
+parser.add_argumentless(['--symlink'],      0, 'Keep as symlink (default)')
+parser.add_argumentless(['--hardlink'],     0, 'Change into hardlink')
+parser.add_argumentless(['--duplicate'],    0, 'Duplicate target instead of linking')
+
+parser.parse()
+
+
+do_exit = True
+if   parser.opts['--copyright'] is not None:  print(copyright[1 : -1])
+elif parser.opts['--warranty']  is not None:  print(copyright.split('\n\n')[-2])
+elif parser.opts['--version']   is not None:  print('%s %s' % (PROGRAM_NAME, PROGRAM_VERSION))
+elif parser.opts['--help']      is not None:  parser.help()
+else:  do_exit = False
+if do_exit:
+    sys.exit(0)
+
+use_relative    = parser.opts['--relative']  is not None
+use_absolute    = parser.opts['--absolute']  is not None
+
+create_symlink  = parser.opts['--symlink']   is not None
+create_hardlink = parser.opts['--hardlink']  is not None
+create_copy     = parser.opts['--duplicate'] is not None
+
