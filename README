@@ -1,0 +1,10 @@
+relink is a simple utility that modifies
+your symlinks in a selected manner:
+
+*  Change linking to relative path, do not follow links
+*  Change linking to absolute path, do not follow links
+*  Change linking to relative path, follow links
+*  Change linking to absolute path, follow links
+*  Change into hardlink
+*  Remove link but duplicate target
+
