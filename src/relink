@@ -113,7 +113,7 @@ def relink_files(files):
             else:
                 Popen(['cp', '-a', '--', target, file]).wait()
         elif recursive and stat.S_ISDIR(attr.st_mode):
-            relink_files(os.listdir(file))
+            relink_files([os.path.join(file, f) for f in os.listdir(file)])
         else:
             sys.stderr.buffer.write(('%s: skipping %s\n' % (sys.argv[0], file)).encode('utf-8'))
             sys.stderr.buffer.flush()
