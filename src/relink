@@ -107,9 +107,9 @@ def relink_files(files):
                     dirname = os.path.dirname(os.path.abspath(file))
                     dirname = os.path.abspath(dirname)
                     target = os.path.relpath(target, dirname)
-                os.symlink(file, target)
+                os.symlink(target, file)
             elif create_hardlink:
-                os.link(file, target, follow_symlinks = False)
+                os.link(target, file, follow_symlinks = False)
             else:
                 Popen(['cp', '-a', '--', target, file]).wait()
         elif recursive and stat.S_ISDIR(attr.st_mode):
