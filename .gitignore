@@ -3,6 +3,9 @@ bin/
 obj/
 \#*\#
 __pycache__/
+/dist/*/*/*
+!/dist/*/*/PKGBUILD
+!/dist/*/*/relink.install
 .*
 !.git*
 *~
@@ -11,3 +14,4 @@ __pycache__/
 *.swp
 *.pyc
 *.pyo
+
