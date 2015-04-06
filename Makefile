@@ -53,23 +53,23 @@ bin/%.info: info/%.texinfo info/fdl.texinfo
 .PHONY: pdf
 pdf: bin/relink.pdf
 bin/%.pdf: info/%.texinfo info/fdl.texinfo
-	mkdir -p obj
-	cd obj ; yes X | texi2pdf ../$<
-	mv obj/$*.pdf $@
+	@mkdir -p obj/pdf
+	cd obj/pdf ; yes X | texi2pdf ../../$<
+	mv obj/pdf/$*.pdf $@
 
 .PHONY: dvi
 dvi: bin/relink.dvi
 bin/%.dvi: info/%.texinfo info/fdl.texinfo
-	mkdir -p obj
-	cd obj ; yes X | $(TEXI2DVI) ../$<
-	mv obj/$*.dvi $@
+	@mkdir -p obj/dvi
+	cd obj/dvi ; yes X | $(TEXI2DVI) ../../$<
+	mv obj/dvi/$*.dvi $@
 
 .PHONY: ps
 ps: bin/relink.ps
 bin/%.ps: info/%.texinfo info/fdl.texinfo
-	mkdir -p obj
-	cd obj ; yes X | texi2pdf --ps ../$<
-	mv obj/$*.ps $@
+	@mkdir -p obj/ps
+	cd obj/ps ; yes X | texi2pdf --ps ../../$<
+	mv obj/ps/$*.ps $@
 
 
 # Build rules for shell auto-completion
