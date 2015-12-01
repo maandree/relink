@@ -1,0 +1,94 @@
+.TH RELINK 1 RELINK
+.SH NAME
+relink - A simple utility that modifies your symlinks
+.SH SYNOPSIS
+.BR relink
+.RI [ OPTION ]...\ [\-\-]\ [ FILE ]...
+.SH DESCRIPTION
+.B relink
+is a simple utility that modifies your symlinks
+.I FILE
+in a selected manner:
+.TP
+*
+Change linking to relative path, do not follow links.
+.TP
+*
+Change linking to absolute path, do not follow links.
+.TP
+*
+Change linking to relative path, follow links.
+.TP
+*
+Change linking to absolute path, follow links.
+.TP
+*
+Change into hardlink.
+.TP
+*
+Remove link but duplicate target.
+.PP
+If
+.I FILE
+is omitted, the file list will be read from stdin.
+.SH OPTIONS
+.TP
+.BR \-\-help
+Print help information.
+.TP
+.BR \-\-copyright
+Print copyright information.
+.TP
+.BR \-\-warranty
+Print warranty disclaimer.
+.TP
+.BR \-\-version
+Print program name and version.
+.TP
+.BR \-\-relative
+Link to relative path. (default)
+.TP
+.BR \-\-absolute
+Link to absolute path.
+.TP
+.BR \-\-symlink
+Keep as symbolic link. (default)
+.TP
+.BR \-\-hardlink
+Change into hardlink.
+.TP
+.BR \-\-duplicate
+Duplicate target instead of linking.
+.TP
+.BR \-\-follow-links
+Follow symlinks when resolving target.
+.TP
+.BR \-\-recursive
+Change links that are inside directories.
+.TP
+.BR \-\-nul
+Use NUL instead of LF as filename terminator
+when reading the filelist from stdin.
+.SH RATIONALE
+Moving files around when symlinks are invoked can be
+hell. Additionally, file managers seldom let you choose
+whether symlinks should be relative or absolute.
+.SH "SEE ALSO"
+.BR ln (1)
+.PP
+Full documentation available locally via: info \(aq(relink)\(aq
+.SH AUTHORS
+Principal author, Mattias Andrée.  See the COPYING file for the full
+list of authors.
+.SH LICENSE
+Copyright \(co 2014, 2015  Mattias Andrée
+.br
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+.br
+There is NO WARRANTY, to the extent permitted by law.
+.SH BUGS
+Please report bugs to https://github.com/maandree/relink/issues or to
+maandree@member.fsf.org
+
