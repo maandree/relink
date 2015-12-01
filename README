@@ -1,10 +1,72 @@
-relink is a simple utility that modifies
-your symlinks in a selected manner:
+NAME
+	relink - A simple utility that modifies your symlinks
 
-*  Change linking to relative path, do not follow links
-*  Change linking to absolute path, do not follow links
-*  Change linking to relative path, follow links
-*  Change linking to absolute path, follow links
-*  Change into hardlink
-*  Remove link but duplicate target
+SYNOPSIS
+	relink [OPTION]... [--] [FILE]...
+
+DESCRIPTION
+	relink is a simple utility that modifies your symlinks
+	FILE in a selected manner:
+
+	*	Change linking to relative path, do not follow
+		links.
+
+	*	Change linking to absolute path, do not follow
+		links.
+
+	*	Change linking to relative path, follow links.
+
+	*	Change linking to absolute path, follow links.
+
+	*	Change into hardlink.
+
+	*	Remove link but duplicate target.
+
+	If FILE is omitted, the file list will be read from stdin.
+
+OPTIONS
+	--help
+		Print help information.
+
+	--copyright
+		Print copyright information.
+
+	--warranty
+		Print warranty disclaimer.
+
+	--version
+		Print program name and version.
+
+	--relative
+		Link to relative path. (default)
+
+	--absolute
+		Link to absolute path.
+
+	--symlink
+		Keep as symbolic link. (default)
+
+	--hardlink
+		Change into hardlink.
+
+	--duplicate
+		Duplicate target instead of linking.
+
+	--follow-links
+		Follow symlinks when resolving target.
+
+	--recursive
+		Change links that are inside directories.
+
+	--nul
+		Use NUL instead of LF as filename terminator
+		when reading the filelist from stdin.
+
+RATIONALE
+	Moving files around when symlinks are invoked can be
+	hell. Additionally, file managers seldom let you choose
+	whether symlinks should be relative or absolute.
+
+SEE ALSO
+	ln(1)
 

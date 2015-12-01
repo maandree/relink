@@ -5,26 +5,26 @@
 
 
 # The package path prefix, if you want to install to another root, set DESTDIR to that root
-PREFIX ?= /usr
+PREFIX = /usr
 # The command path excluding prefix
-BIN ?= /bin
+BIN = /bin
 # The resource path excluding prefix
-DATA ?= /share
+DATA = /share
 # The command path including prefix
-BINDIR ?= $(PREFIX)$(BIN)
+BINDIR = $(PREFIX)$(BIN)
 # The resource path including prefix
-DATADIR ?= $(PREFIX)$(DATA)
+DATADIR = $(PREFIX)$(DATA)
 # The generic documentation path including prefix
-DOCDIR ?= $(DATADIR)/doc
+DOCDIR = $(DATADIR)/doc
 # The info manual documentation path including prefix
-INFODIR ?= $(DATADIR)/info
+INFODIR = $(DATADIR)/info
 # The license base path including prefix
-LICENSEDIR ?= $(DATADIR)/licenses
+LICENSEDIR = $(DATADIR)/licenses
 
 # The name of the command as it should be installed
-COMMAND ?= relink
+COMMAND = relink
 # The name of the package as it should be installed
-PKGNAME ?= relink
+PKGNAME = relink
 
 
 # Build rules
@@ -36,7 +36,7 @@ default: info shell
 all: doc shell
 
 .PHONY: command
-command: $(foreach C,$(CBINDINGS),bin/$(C)) $(foreach E,$(EXECLIBS),bin/$(E)) bin/relink
+command: bin/relink
 
 
 # Build rules for documentation
@@ -46,29 +46,30 @@ doc: info pdf dvi ps
 
 .PHONY: info
 info: bin/relink.info
-bin/%.info: info/%.texinfo info/fdl.texinfo
+bin/%.info: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p bin
 	makeinfo $<
 	mv $*.info $@
 
 .PHONY: pdf
 pdf: bin/relink.pdf
-bin/%.pdf: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/pdf
-	cd obj/pdf ; yes X | texi2pdf ../../$<
+bin/%.pdf: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/pdf bin
+	cd obj/pdf && texi2pdf ../../$< < /dev/null
 	mv obj/pdf/$*.pdf $@
 
 .PHONY: dvi
 dvi: bin/relink.dvi
-bin/%.dvi: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/dvi
-	cd obj/dvi ; yes X | $(TEXI2DVI) ../../$<
+bin/%.dvi: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/dvi bin
+	cd obj/dvi && $(TEXI2DVI) ../../$< < /dev/null
 	mv obj/dvi/$*.dvi $@
 
 .PHONY: ps
 ps: bin/relink.ps
-bin/%.ps: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/ps
-	cd obj/ps ; yes X | texi2pdf --ps ../../$<
+bin/%.ps: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/ps bin
+	cd obj/ps && texi2pdf --ps ../../$< < /dev/null
 	mv obj/ps/$*.ps $@
 
 
@@ -107,17 +108,25 @@ install-all: install-base install-doc install-shell
 # Install base rules
 
 .PHONY: install-base
-install-base: install-command install-license
+install-base: install-command install-copyright
 
 .PHONY: install-command
 install-command: src/relink
 	install -dm755 -- "$(DESTDIR)$(BINDIR)"
 	install -m755 $< -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
 
+.PHONY: install-copyright
+install-copyright: install-copying install-license
+
+.PHONY: install-copying
+install-copying:
+	install -dm755 -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+	install -m644 COPYING -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+
 .PHONY: install-license
 install-license:
 	install -dm755 -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
-	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+	install -m644 LICENSE -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
 # Install documentation
 
